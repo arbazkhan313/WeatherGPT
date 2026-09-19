@@ -1,0 +1,934 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      #dbeafe 0,
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      #e0e7ff 0,
+      transparent 35%
+    ),
+    #f8fafc;
+
+  color: #0f172a;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+
+/* =========================
+   APP
+========================= */
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+  height: 76px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 7%;
+
+  background: rgba(255, 255, 255, 0.75);
+
+  backdrop-filter: blur(16px);
+
+  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+
+  position: sticky;
+  top: 0;
+
+  z-index: 10;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon {
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+
+  background: #0f172a;
+  color: white;
+
+  box-shadow:
+    0 8px 20px rgba(15, 23, 42, 0.15);
+}
+
+.brand h1 {
+  margin: 0;
+
+  font-size: 20px;
+  font-weight: 750;
+
+  letter-spacing: -0.5px;
+}
+
+.brand p {
+  margin: 2px 0 0;
+
+  font-size: 12px;
+
+  color: #64748b;
+}
+
+.location-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 9px 14px;
+
+  border-radius: 999px;
+
+  background: white;
+
+  border: 1px solid #e2e8f0;
+
+  font-size: 13px;
+  color: #475569;
+
+  box-shadow:
+    0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+.main {
+  width: min(1050px, 90%);
+
+  margin: 0 auto;
+
+  flex: 1;
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+  text-align: center;
+
+  padding:
+    80px 20px
+    45px;
+}
+
+.hero-icon {
+  width: 46px;
+  height: 46px;
+
+  margin: 0 auto 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: white;
+
+  border: 1px solid #e2e8f0;
+
+  box-shadow:
+    0 8px 25px rgba(15, 23, 42, 0.07);
+
+  color: #334155;
+}
+
+.hero h2 {
+  margin: 0;
+
+  font-size: clamp(36px, 6vw, 62px);
+
+  line-height: 1.05;
+
+  letter-spacing: -2.8px;
+
+  font-weight: 800;
+}
+
+.hero h2 span {
+  display: block;
+
+  color: #475569;
+}
+
+.hero p {
+  margin: 20px auto 30px;
+
+  max-width: 550px;
+
+  color: #64748b;
+
+  font-size: 16px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+.search-box {
+  width: min(720px, 100%);
+
+  margin: 0 auto;
+
+  height: 66px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 9px 0 20px;
+
+  background: white;
+
+  border: 1px solid #dbe3ef;
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 18px 45px rgba(15, 23, 42, 0.09);
+
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.search-box:focus-within {
+  border-color: #94a3b8;
+
+  box-shadow:
+    0 18px 45px rgba(15, 23, 42, 0.13);
+}
+
+.search-box > svg {
+  color: #94a3b8;
+
+  flex-shrink: 0;
+}
+
+.search-box input {
+  flex: 1;
+
+  height: 100%;
+
+  border: none;
+  outline: none;
+
+  padding: 0 14px;
+
+  background: transparent;
+
+  color: #0f172a;
+
+  font-size: 15px;
+}
+
+.search-box input::placeholder {
+  color: #94a3b8;
+}
+
+.search-box button {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+
+  border-radius: 15px;
+
+  background: #0f172a;
+
+  color: white;
+
+  transition:
+    transform 0.2s,
+    background 0.2s;
+}
+
+.search-box button:hover {
+  transform: translateY(-1px);
+
+  background: #1e293b;
+}
+
+.search-box button:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+
+  transform: none;
+}
+
+
+/* =========================
+   QUICK QUESTIONS
+========================= */
+
+.quick-questions {
+  margin-top: 18px;
+
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  gap: 9px;
+}
+
+.quick-questions button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 9px 13px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.7);
+
+  border: 1px solid #e2e8f0;
+
+  color: #475569;
+
+  font-size: 12px;
+
+  transition:
+    background 0.2s,
+    transform 0.2s;
+}
+
+.quick-questions button:hover {
+  background: white;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================
+   LOADING
+========================= */
+
+.loading-card {
+  width: min(720px, 100%);
+
+  margin: 0 auto 35px;
+
+  padding: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+
+  background: white;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 18px;
+
+  color: #64748b;
+
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.05);
+}
+
+.loader {
+  width: 18px;
+  height: 18px;
+
+  border: 2px solid #cbd5e1;
+
+  border-top-color: #0f172a;
+
+  border-radius: 50%;
+
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =========================
+   RESULT
+========================= */
+
+.result-section {
+  margin-bottom: 60px;
+
+  animation: appear 0.35s ease;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.result-location {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 18px;
+}
+
+.result-location > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.result-location strong {
+  font-size: 17px;
+}
+
+.result-location span {
+  color: #64748b;
+
+  font-size: 13px;
+}
+
+.intent-badge {
+  padding: 6px 11px;
+
+  border-radius: 999px;
+
+  background: #f1f5f9;
+
+  color: #475569 !important;
+
+  font-size: 11px !important;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.5px;
+}
+
+
+/* =========================
+   WEATHER GRID
+========================= */
+
+.weather-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 14px;
+}
+
+.weather-card {
+  padding: 22px;
+
+  background: rgba(255, 255, 255, 0.82);
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 8px 25px rgba(15, 23, 42, 0.045);
+}
+
+.weather-card svg {
+  width: 21px;
+  height: 21px;
+
+  color: #475569;
+
+  margin-bottom: 18px;
+}
+
+.weather-card span {
+  display: block;
+
+  color: #64748b;
+
+  font-size: 12px;
+}
+
+.weather-card strong {
+  display: block;
+
+  margin-top: 6px;
+
+  font-size: 25px;
+
+  letter-spacing: -0.8px;
+}
+
+.weather-card small {
+  display: block;
+
+  margin-top: 5px;
+
+  color: #94a3b8;
+
+  font-size: 11px;
+}
+
+
+/* =========================
+   FORECAST
+========================= */
+
+.forecast-card {
+  margin-top: 18px;
+
+  padding: 22px;
+
+  background: white;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 8px 25px rgba(15, 23, 42, 0.045);
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  margin-bottom: 18px;
+}
+
+.section-title svg {
+  color: #475569;
+}
+
+.section-title h3 {
+  margin: 0;
+
+  font-size: 15px;
+}
+
+
+.forecast-list {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 10px;
+}
+
+.forecast-item {
+  padding: 14px;
+
+  background: #f8fafc;
+
+  border: 1px solid #edf2f7;
+
+  border-radius: 14px;
+}
+
+.forecast-item span {
+  display: block;
+
+  font-size: 11px;
+
+  color: #64748b;
+}
+
+.forecast-item strong {
+  display: block;
+
+  margin-top: 7px;
+
+  font-size: 20px;
+}
+
+.forecast-item small {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #64748b;
+
+  font-size: 11px;
+}
+
+
+/* =========================
+   HISTORY
+========================= */
+
+.history-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 10px;
+}
+
+.history-grid > div {
+  padding: 15px;
+
+  background: #f8fafc;
+
+  border-radius: 14px;
+}
+
+.history-grid span {
+  display: block;
+
+  color: #64748b;
+
+  font-size: 11px;
+}
+
+.history-grid strong {
+  display: block;
+
+  margin-top: 5px;
+
+  font-size: 18px;
+}
+
+
+/* =========================
+   AI ANSWER
+========================= */
+
+.ai-answer {
+  margin-top: 18px;
+
+  padding: 25px;
+
+  background: #0f172a;
+
+  color: white;
+
+  border-radius: 22px;
+
+  box-shadow:
+    0 15px 35px rgba(15, 23, 42, 0.16);
+}
+
+.answer-header {
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+  margin-bottom: 17px;
+}
+
+.ai-icon {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.answer-header h3 {
+  margin: 0;
+
+  font-size: 14px;
+}
+
+.answer-header span {
+  display: block;
+
+  margin-top: 2px;
+
+  color: #94a3b8;
+
+  font-size: 10px;
+}
+
+.ai-answer p {
+  margin: 0;
+
+  color: #e2e8f0;
+
+  line-height: 1.7;
+
+  font-size: 14px;
+}
+
+
+/* =========================
+   ERROR
+========================= */
+
+.error-card {
+  margin: 0 auto 40px;
+
+  padding: 20px;
+
+  background: #fff;
+
+  border: 1px solid #fecaca;
+
+  border-radius: 18px;
+
+  color: #991b1b;
+}
+
+.error-card p {
+  margin-bottom: 0;
+
+  color: #b91c1c;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+  height: 70px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  color: #94a3b8;
+
+  font-size: 11px;
+}
+
+footer span:first-child {
+  color: #475569;
+
+  font-weight: 700;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 800px) {
+
+  .header {
+    padding: 0 5%;
+  }
+
+  .weather-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .history-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .forecast-list {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+}
+
+
+@media (max-width: 520px) {
+
+  .header {
+    height: 68px;
+  }
+
+  .location-pill {
+    display: none;
+  }
+
+  .hero {
+    padding-top: 55px;
+  }
+
+  .hero h2 {
+    font-size: 39px;
+
+    letter-spacing: -1.8px;
+  }
+
+  .hero p {
+    font-size: 14px;
+  }
+
+  .search-box {
+    height: 60px;
+  }
+
+  .weather-grid,
+  .forecast-list,
+  .history-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .result-location {
+    align-items: flex-start;
+
+    gap: 10px;
+  }
+
+
+}
+/* =========================
+   AI MARKDOWN CONTENT
+========================= */
+
+.ai-answer-content {
+  color: #e2e8f0;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.ai-answer-content p {
+  margin: 0 0 16px;
+}
+
+.ai-answer-content p:last-child {
+  margin-bottom: 0;
+}
+
+.ai-answer-content h1,
+.ai-answer-content h2,
+.ai-answer-content h3 {
+  color: white;
+  margin: 18px 0 10px;
+}
+
+.ai-answer-content h2 {
+  font-size: 20px;
+}
+
+.ai-answer-content h3 {
+  font-size: 16px;
+}
+
+.ai-answer-content strong {
+  color: white;
+}
+
+.ai-answer-content ul,
+.ai-answer-content ol {
+  margin: 10px 0 16px;
+  padding-left: 24px;
+}
+
+.ai-answer-content li {
+  margin-bottom: 7px;
+}
+
+.ai-answer-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 18px 0;
+  font-size: 13px;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.ai-answer-content th,
+.ai-answer-content td {
+  padding: 10px 12px;
+  text-align: left;
+  border: 1px solid #334155;
+}
+
+.ai-answer-content th {
+  background: #1e293b;
+  color: white;
+  font-weight: 700;
+}
+
+.ai-answer-content td {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.ai-answer-content blockquote {
+  margin: 16px 0;
+  padding: 10px 16px;
+  border-left: 3px solid #64748b;
+  background: rgba(255, 255, 255, 0.04);
+  color: #cbd5e1;
+}
+
+.ai-answer-content code {
+  padding: 2px 5px;
+  border-radius: 5px;
+  background: #1e293b;
+  color: #e2e8f0;
+}
