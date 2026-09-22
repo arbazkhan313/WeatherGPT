@@ -1,12 +1,19 @@
+/* =========================================================
+   GLOBAL
+========================================================= */
+
 * {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
   font-family:
     Inter,
-    system-ui,
     -apple-system,
     BlinkMacSystemFont,
     "Segoe UI",
@@ -15,46 +22,34 @@ body {
   background:
     radial-gradient(
       circle at top left,
-      #dbeafe 0,
-      transparent 35%
-    ),
-    radial-gradient(
-      circle at bottom right,
-      #e0e7ff 0,
-      transparent 35%
-    ),
-    #f8fafc;
+      #f1f5f9 0%,
+      #f8fafc 45%,
+      #eef2ff 100%
+    );
 
   color: #0f172a;
 }
 
-button,
-input {
-  font: inherit;
-}
 
-button {
-  cursor: pointer;
-}
-
-
-/* =========================
+/* =========================================================
    APP
-========================= */
+========================================================= */
 
 .app {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
 
-/* =========================
+/* =========================================================
    HEADER
-========================= */
+========================================================= */
 
 .header {
-  height: 76px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  height: 60px;
 
   display: flex;
   align-items: center;
@@ -62,136 +57,134 @@ button {
 
   padding: 0 7%;
 
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.92);
 
-  backdrop-filter: blur(16px);
+  border-bottom: 1px solid #e2e8f0;
 
-  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
-
-  position: sticky;
-  top: 0;
-
-  z-index: 10;
+  backdrop-filter: blur(12px);
 }
+
+
+/* =========================================================
+   BRAND
+========================================================= */
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 11px;
 }
 
 .brand-icon {
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 14px;
+  border-radius: 11px;
 
   background: #0f172a;
   color: white;
 
-  box-shadow:
-    0 8px 20px rgba(15, 23, 42, 0.15);
+  box-shadow: 0 5px 15px rgba(15, 23, 42, 0.2);
 }
 
 .brand h1 {
   margin: 0;
 
-  font-size: 20px;
-  font-weight: 750;
+  font-size: 16px;
+  line-height: 1.1;
 
-  letter-spacing: -0.5px;
+  color: #0f172a;
 }
 
 .brand p {
-  margin: 2px 0 0;
+  margin: 3px 0 0;
 
-  font-size: 12px;
+  font-size: 9px;
 
-  color: #64748b;
+  color: #94a3b8;
 }
+
+
+/* =========================================================
+   LOCATION PILL
+========================================================= */
 
 .location-pill {
   display: flex;
   align-items: center;
   gap: 7px;
 
-  padding: 9px 14px;
+  padding: 9px 13px;
 
+  border: 1px solid #e2e8f0;
   border-radius: 999px;
 
   background: white;
 
-  border: 1px solid #e2e8f0;
+  color: #64748b;
 
-  font-size: 13px;
-  color: #475569;
+  font-size: 11px;
 
-  box-shadow:
-    0 4px 14px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.04);
 }
 
 
-/* =========================
+/* =========================================================
    MAIN
-========================= */
+========================================================= */
 
 .main {
-  width: min(1050px, 90%);
+  width: min(900px, 92%);
 
   margin: 0 auto;
 
-  flex: 1;
+  padding: 45px 0 70px;
 }
 
 
-/* =========================
+/* =========================================================
    HERO
-========================= */
+========================================================= */
 
 .hero {
   text-align: center;
 
-  padding:
-    80px 20px
-    45px;
+  margin-bottom: 38px;
 }
 
 .hero-icon {
-  width: 46px;
-  height: 46px;
+  width: 44px;
+  height: 44px;
 
-  margin: 0 auto 18px;
+  margin: 0 auto 15px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 50%;
+  border-radius: 13px;
 
-  background: white;
+  background: #e2e8f0;
 
-  border: 1px solid #e2e8f0;
-
-  box-shadow:
-    0 8px 25px rgba(15, 23, 42, 0.07);
-
-  color: #334155;
+  color: #475569;
 }
 
 .hero h2 {
   margin: 0;
 
-  font-size: clamp(36px, 6vw, 62px);
+  font-size: clamp(38px, 6vw, 58px);
 
-  line-height: 1.05;
+  line-height: 0.98;
 
-  letter-spacing: -2.8px;
+  letter-spacing: -2.5px;
 
   font-weight: 800;
+
+  color: #0f172a;
 }
 
 .hero h2 span {
@@ -200,77 +193,63 @@ button {
   color: #475569;
 }
 
-.hero p {
-  margin: 20px auto 30px;
-
-  max-width: 550px;
+.hero > p {
+  margin: 18px 0 25px;
 
   color: #64748b;
 
-  font-size: 16px;
-
-  line-height: 1.6;
+  font-size: 13px;
 }
 
 
-/* =========================
-   SEARCH
-========================= */
+/* =========================================================
+   SEARCH BOX
+========================================================= */
 
 .search-box {
-  width: min(720px, 100%);
+  width: min(580px, 100%);
 
   margin: 0 auto;
-
-  height: 66px;
 
   display: flex;
   align-items: center;
 
-  padding: 0 9px 0 20px;
+  padding: 6px 7px 6px 15px;
 
   background: white;
 
-  border: 1px solid #dbe3ef;
+  border: 1px solid #dbe3ee;
 
-  border-radius: 20px;
+  border-radius: 15px;
 
   box-shadow:
-    0 18px 45px rgba(15, 23, 42, 0.09);
+    0 15px 35px rgba(15, 23, 42, 0.08);
 
-  transition:
-    border-color 0.2s,
-    box-shadow 0.2s;
+  color: #94a3b8;
 }
 
 .search-box:focus-within {
   border-color: #94a3b8;
 
   box-shadow:
-    0 18px 45px rgba(15, 23, 42, 0.13);
-}
-
-.search-box > svg {
-  color: #94a3b8;
-
-  flex-shrink: 0;
+    0 15px 35px rgba(15, 23, 42, 0.11);
 }
 
 .search-box input {
   flex: 1;
 
-  height: 100%;
+  min-width: 0;
 
   border: none;
   outline: none;
 
-  padding: 0 14px;
-
   background: transparent;
 
-  color: #0f172a;
+  padding: 12px;
 
-  font-size: 15px;
+  font-size: 12px;
+
+  color: #334155;
 }
 
 .search-box input::placeholder {
@@ -278,8 +257,8 @@ button {
 }
 
 .search-box button {
-  width: 48px;
-  height: 48px;
+  width: 38px;
+  height: 38px;
 
   display: flex;
   align-items: center;
@@ -287,15 +266,15 @@ button {
 
   border: none;
 
-  border-radius: 15px;
+  border-radius: 11px;
 
   background: #0f172a;
 
   color: white;
 
-  transition:
-    transform 0.2s,
-    background 0.2s;
+  cursor: pointer;
+
+  transition: 0.2s ease;
 }
 
 .search-box button:hover {
@@ -313,85 +292,86 @@ button {
 }
 
 
-/* =========================
+/* =========================================================
    QUICK QUESTIONS
-========================= */
+========================================================= */
 
 .quick-questions {
-  margin-top: 18px;
-
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
 
-  gap: 9px;
+  gap: 8px;
+
+  margin-top: 14px;
 }
 
 .quick-questions button {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
 
-  padding: 9px 13px;
-
-  border-radius: 999px;
-
-  background: rgba(255, 255, 255, 0.7);
+  padding: 8px 11px;
 
   border: 1px solid #e2e8f0;
 
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.8);
+
   color: #475569;
 
-  font-size: 12px;
+  font-size: 10px;
 
-  transition:
-    background 0.2s,
-    transform 0.2s;
+  cursor: pointer;
+
+  transition: 0.2s ease;
 }
 
 .quick-questions button:hover {
   background: white;
 
+  border-color: #cbd5e1;
+
   transform: translateY(-1px);
 }
 
 
-/* =========================
+/* =========================================================
    LOADING
-========================= */
+========================================================= */
 
 .loading-card {
-  width: min(720px, 100%);
+  padding: 28px;
 
-  margin: 0 auto 35px;
+  margin-bottom: 25px;
 
-  padding: 22px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 12px;
+  text-align: center;
 
   background: white;
 
   border: 1px solid #e2e8f0;
 
-  border-radius: 18px;
+  border-radius: 16px;
+}
+
+.loading-card p {
+  margin: 12px 0 0;
 
   color: #64748b;
 
-  box-shadow:
-    0 10px 30px rgba(15, 23, 42, 0.05);
+  font-size: 12px;
 }
 
 .loader {
-  width: 18px;
-  height: 18px;
+  width: 26px;
+  height: 26px;
 
-  border: 2px solid #cbd5e1;
+  margin: 0 auto;
 
-  border-top-color: #0f172a;
+  border: 3px solid #e2e8f0;
+
+  border-top-color: #475569;
 
   border-radius: 50%;
 
@@ -405,458 +385,844 @@ button {
 }
 
 
-/* =========================
-   RESULT
-========================= */
+/* =========================================================
+   RESULT SECTION
+========================================================= */
 
 .result-section {
-  margin-bottom: 60px;
-
-  animation: appear 0.35s ease;
+  margin-top: 20px;
 }
 
-@keyframes appear {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* =========================================================
+   RESULT LOCATION
+========================================================= */
 
 .result-location {
   display: flex;
-
   align-items: center;
   justify-content: space-between;
 
-  margin-bottom: 18px;
+  margin-bottom: 13px;
+
+  padding: 0 2px;
 }
 
 .result-location > div {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
+}
+
+.result-location svg {
+  color: #475569;
 }
 
 .result-location strong {
-  font-size: 17px;
+  font-size: 12px;
 }
 
 .result-location span {
-  color: #64748b;
+  font-size: 10px;
 
-  font-size: 13px;
+  color: #64748b;
 }
 
 .intent-badge {
-  padding: 6px 11px;
+  padding: 7px 10px;
 
   border-radius: 999px;
 
   background: #f1f5f9;
 
-  color: #475569 !important;
-
-  font-size: 11px !important;
+  color: #64748b !important;
 
   text-transform: uppercase;
+
+  font-size: 8px !important;
 
   letter-spacing: 0.5px;
 }
 
 
-/* =========================
+/* =========================================================
    WEATHER GRID
-========================= */
+========================================================= */
 
 .weather-grid {
   display: grid;
 
-  grid-template-columns:
-    repeat(4, 1fr);
+  grid-template-columns: repeat(4, 1fr);
 
-  gap: 14px;
+  gap: 10px;
+
+  margin-bottom: 16px;
 }
 
 .weather-card {
-  padding: 22px;
-
-  background: rgba(255, 255, 255, 0.82);
-
-  border: 1px solid #e2e8f0;
-
-  border-radius: 20px;
-
-  box-shadow:
-    0 8px 25px rgba(15, 23, 42, 0.045);
-}
-
-.weather-card svg {
-  width: 21px;
-  height: 21px;
-
-  color: #475569;
-
-  margin-bottom: 18px;
-}
-
-.weather-card span {
-  display: block;
-
-  color: #64748b;
-
-  font-size: 12px;
-}
-
-.weather-card strong {
-  display: block;
-
-  margin-top: 6px;
-
-  font-size: 25px;
-
-  letter-spacing: -0.8px;
-}
-
-.weather-card small {
-  display: block;
-
-  margin-top: 5px;
-
-  color: #94a3b8;
-
-  font-size: 11px;
-}
-
-
-/* =========================
-   FORECAST
-========================= */
-
-.forecast-card {
-  margin-top: 18px;
-
-  padding: 22px;
+  padding: 16px;
 
   background: white;
 
   border: 1px solid #e2e8f0;
 
-  border-radius: 20px;
+  border-radius: 13px;
 
-  box-shadow:
-    0 8px 25px rgba(15, 23, 42, 0.045);
+  display: flex;
+  flex-direction: column;
+
+  min-height: 125px;
+}
+
+.weather-card svg {
+  width: 19px;
+  height: 19px;
+
+  color: #64748b;
+
+  margin-bottom: 12px;
+}
+
+.weather-card span {
+  font-size: 10px;
+
+  color: #64748b;
+}
+
+.weather-card strong {
+  margin-top: 4px;
+
+  font-size: 20px;
+
+  color: #0f172a;
+}
+
+.weather-card small {
+  margin-top: 3px;
+
+  font-size: 9px;
+
+  color: #94a3b8;
+}
+
+
+/* =========================================================
+   RISK SECTION
+========================================================= */
+
+.risk-section {
+  padding: 18px;
+
+  margin-bottom: 16px;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 17px;
+
+  background: rgba(248, 250, 252, 0.88);
+}
+
+
+/* =========================================================
+   RISK HEADER
+========================================================= */
+
+.risk-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 18px;
+}
+
+.risk-heading {
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+}
+
+.risk-title-icon {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 11px;
+
+  background: #e2e8f0;
+
+  color: #475569;
+}
+
+.risk-heading h3 {
+  margin: 0;
+
+  font-size: 15px;
+
+  color: #0f172a;
+}
+
+.risk-heading p {
+  margin: 4px 0 0;
+
+  font-size: 9px;
+
+  color: #64748b;
+}
+
+
+/* =========================================================
+   OVERALL RISK
+========================================================= */
+
+.overall-risk-badge {
+  min-width: 85px;
+
+  padding: 9px 12px;
+
+  text-align: center;
+
+  border: 1px solid;
+
+  border-radius: 11px;
+}
+
+.overall-risk-badge span {
+  display: block;
+
+  margin-bottom: 2px;
+
+  font-size: 8px;
+
+  color: #64748b;
+}
+
+.overall-risk-badge strong {
+  display: block;
+
+  font-size: 13px;
+
+  text-transform: capitalize;
+}
+
+
+/* =========================================================
+   RISK LEVELS
+========================================================= */
+
+.risk-high {
+  background: #fef2f2;
+
+  border-color: #fecaca;
+}
+
+.risk-high strong,
+.risk-high .risk-card-icon {
+  color: #dc2626;
+}
+
+.risk-moderate {
+  background: #fffbeb;
+
+  border-color: #fde68a;
+}
+
+.risk-moderate strong,
+.risk-moderate .risk-card-icon {
+  color: #d97706;
+}
+
+.risk-low {
+  background: #f0fdf4;
+
+  border-color: #bbf7d0;
+}
+
+.risk-low strong,
+.risk-low .risk-card-icon {
+  color: #16a34a;
+}
+
+
+/* =========================================================
+   RISK INDICATORS
+========================================================= */
+
+.risk-indicators {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 9px;
+
+  margin-bottom: 15px;
+}
+
+.risk-indicator-card {
+  min-height: 92px;
+
+  padding: 12px;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+
+  text-align: center;
+
+  background: white;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 11px;
+}
+
+.risk-indicator-card svg {
+  width: 16px;
+  height: 16px;
+
+  margin: 0 auto 7px;
+
+  color: #94a3b8;
+}
+
+.risk-indicator-card span {
+  display: block;
+
+  font-size: 8px;
+
+  color: #64748b;
+}
+
+.risk-indicator-card strong {
+  display: block;
+
+  margin-top: 3px;
+
+  font-size: 15px;
+
+  color: #0f172a;
+}
+
+
+/* =========================================================
+   PRIORITY RISK
+========================================================= */
+
+.priority-risk {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 9px 11px;
+
+  margin-bottom: 16px;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 9px;
+
+  background: white;
+
+  color: #64748b;
+
+  font-size: 10px;
+}
+
+.priority-risk svg {
+  color: #d97706;
+}
+
+.priority-risk strong {
+  color: #0f172a;
+}
+
+
+/* =========================================================
+   DETECTED RISKS
+========================================================= */
+
+.risk-subtitle {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  margin-bottom: 10px;
+}
+
+.risk-subtitle svg {
+  width: 15px;
+  height: 15px;
+
+  color: #64748b;
+}
+
+.risk-subtitle h4 {
+  margin: 0;
+
+  font-size: 12px;
+
+  color: #0f172a;
+}
+
+
+/* =========================================================
+   RISK LIST
+========================================================= */
+
+.risk-list {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 10px;
+}
+
+
+/* =========================================================
+   RISK CARD
+========================================================= */
+
+.risk-card {
+  padding: 13px;
+
+  border: 1px solid;
+
+  border-radius: 13px;
+}
+
+.risk-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin-bottom: 11px;
+}
+
+.risk-card-title {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+}
+
+.risk-card-icon {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 9px;
+
+  background: white;
+}
+
+.risk-card-title h4 {
+  margin: 0 0 3px;
+
+  font-size: 11px;
+
+  color: #0f172a;
+}
+
+.risk-card-title span {
+  font-size: 8px;
+
+  color: #64748b;
+
+  text-transform: capitalize;
+}
+
+.severity-score {
+  padding: 5px 7px;
+
+  border-radius: 7px;
+
+  background: rgba(255, 255, 255, 0.8);
+
+  color: #64748b;
+
+  font-size: 8px;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   WHY
+========================================================= */
+
+.risk-reason {
+  padding: 10px;
+
+  margin-bottom: 7px;
+
+  border-radius: 8px;
+
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.risk-reason strong,
+.risk-advice strong,
+.risk-evidence > strong {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #334155;
+
+  font-size: 9px;
+}
+
+.risk-reason p,
+.risk-advice p {
+  margin: 0;
+
+  color: #475569;
+
+  font-size: 9px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   EVIDENCE
+========================================================= */
+
+.risk-evidence {
+  padding: 10px;
+
+  margin-bottom: 7px;
+
+  border-radius: 8px;
+
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.evidence-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 6px;
+}
+
+.evidence-item {
+  padding: 7px;
+
+  border-radius: 6px;
+
+  background: rgba(226, 232, 240, 0.5);
+}
+
+.evidence-item span {
+  display: block;
+
+  margin-bottom: 2px;
+
+  color: #64748b;
+
+  font-size: 7px;
+}
+
+.evidence-item strong {
+  display: block;
+
+  color: #0f172a;
+
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   SAFETY ADVICE
+========================================================= */
+
+.risk-advice {
+  padding: 10px;
+
+  border-radius: 8px;
+
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.risk-advice strong {
+  color: #0f172a;
+}
+
+
+/* =========================================================
+   NO RISK
+========================================================= */
+
+.no-risk-card {
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  padding: 14px;
+
+  border: 1px solid #bbf7d0;
+
+  border-radius: 11px;
+
+  background: #f0fdf4;
+}
+
+.no-risk-card > div:first-child {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 9px;
+
+  background: white;
+
+  color: #16a34a;
+}
+
+.no-risk-card strong {
+  display: block;
+
+  color: #166534;
+
+  font-size: 10px;
+}
+
+.no-risk-card p {
+  margin: 4px 0 0;
+
+  color: #4d7c0f;
+
+  font-size: 8px;
+}
+
+
+/* =========================================================
+   FORECAST CARD
+========================================================= */
+
+.forecast-card {
+  padding: 17px;
+
+  margin-bottom: 16px;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 15px;
+
+  background: white;
 }
 
 .section-title {
   display: flex;
   align-items: center;
 
-  gap: 9px;
+  gap: 8px;
 
-  margin-bottom: 18px;
+  margin-bottom: 13px;
 }
 
 .section-title svg {
-  color: #475569;
+  color: #64748b;
 }
 
 .section-title h3 {
   margin: 0;
 
-  font-size: 15px;
+  font-size: 13px;
+
+  color: #0f172a;
 }
 
+
+/* =========================================================
+   FORECAST LIST
+========================================================= */
 
 .forecast-list {
   display: grid;
 
-  grid-template-columns:
-    repeat(3, 1fr);
-
-  gap: 10px;
+  gap: 7px;
 }
 
 .forecast-item {
-  padding: 14px;
+  display: grid;
+
+  grid-template-columns: 1.5fr 0.7fr 1fr;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 10px 12px;
+
+  border-radius: 8px;
 
   background: #f8fafc;
-
-  border: 1px solid #edf2f7;
-
-  border-radius: 14px;
 }
 
 .forecast-item span {
-  display: block;
-
-  font-size: 11px;
-
   color: #64748b;
+
+  font-size: 9px;
 }
 
 .forecast-item strong {
-  display: block;
+  color: #0f172a;
 
-  margin-top: 7px;
-
-  font-size: 20px;
+  font-size: 11px;
 }
 
 .forecast-item small {
+  color: #64748b;
+
+  font-size: 9px;
+
+  text-transform: capitalize;
+}
+
+
+/* =========================================================
+   HISTORY GRID
+========================================================= */
+
+.history-grid {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 8px;
+}
+
+.history-grid > div {
+  padding: 13px;
+
+  text-align: center;
+
+  border-radius: 9px;
+
+  background: #f8fafc;
+}
+
+.history-grid span {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #64748b;
+
+  font-size: 9px;
+}
+
+.history-grid strong {
+  color: #0f172a;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   AI ANSWER
+========================================================= */
+
+.ai-answer {
+  padding: 18px;
+
+  border-radius: 16px;
+
+  background: #0f172a;
+
+  color: white;
+
+  box-shadow:
+    0 15px 35px rgba(15, 23, 42, 0.2);
+}
+
+
+/* =========================================================
+   ANSWER HEADER
+========================================================= */
+
+.answer-header {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  margin-bottom: 17px;
+}
+
+.ai-icon {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #1e293b;
+
+  color: #e2e8f0;
+}
+
+.answer-header h3 {
+  margin: 0;
+
+  font-size: 11px;
+
+  color: white;
+}
+
+.answer-header span {
   display: block;
 
   margin-top: 3px;
 
   color: #64748b;
 
-  font-size: 11px;
+  font-size: 7px;
 }
 
 
-/* =========================
-   HISTORY
-========================= */
-
-.history-grid {
-  display: grid;
-
-  grid-template-columns:
-    repeat(4, 1fr);
-
-  gap: 10px;
-}
-
-.history-grid > div {
-  padding: 15px;
-
-  background: #f8fafc;
-
-  border-radius: 14px;
-}
-
-.history-grid span {
-  display: block;
-
-  color: #64748b;
-
-  font-size: 11px;
-}
-
-.history-grid strong {
-  display: block;
-
-  margin-top: 5px;
-
-  font-size: 18px;
-}
-
-
-/* =========================
-   AI ANSWER
-========================= */
-
-.ai-answer {
-  margin-top: 18px;
-
-  padding: 25px;
-
-  background: #0f172a;
-
-  color: white;
-
-  border-radius: 22px;
-
-  box-shadow:
-    0 15px 35px rgba(15, 23, 42, 0.16);
-}
-
-.answer-header {
-  display: flex;
-
-  align-items: center;
-
-  gap: 11px;
-
-  margin-bottom: 17px;
-}
-
-.ai-icon {
-  width: 38px;
-  height: 38px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 12px;
-
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.answer-header h3 {
-  margin: 0;
-
-  font-size: 14px;
-}
-
-.answer-header span {
-  display: block;
-
-  margin-top: 2px;
-
-  color: #94a3b8;
-
-  font-size: 10px;
-}
-
-.ai-answer p {
-  margin: 0;
-
-  color: #e2e8f0;
-
-  line-height: 1.7;
-
-  font-size: 14px;
-}
-
-
-/* =========================
-   ERROR
-========================= */
-
-.error-card {
-  margin: 0 auto 40px;
-
-  padding: 20px;
-
-  background: #fff;
-
-  border: 1px solid #fecaca;
-
-  border-radius: 18px;
-
-  color: #991b1b;
-}
-
-.error-card p {
-  margin-bottom: 0;
-
-  color: #b91c1c;
-}
-
-
-/* =========================
-   FOOTER
-========================= */
-
-footer {
-  height: 70px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 10px;
-
-  color: #94a3b8;
-
-  font-size: 11px;
-}
-
-footer span:first-child {
-  color: #475569;
-
-  font-weight: 700;
-}
-
-
-/* =========================
-   RESPONSIVE
-========================= */
-
-@media (max-width: 800px) {
-
-  .header {
-    padding: 0 5%;
-  }
-
-  .weather-grid {
-    grid-template-columns:
-      repeat(2, 1fr);
-  }
-
-  .history-grid {
-    grid-template-columns:
-      repeat(2, 1fr);
-  }
-
-  .forecast-list {
-    grid-template-columns:
-      repeat(2, 1fr);
-  }
-
-}
-
-
-@media (max-width: 520px) {
-
-  .header {
-    height: 68px;
-  }
-
-  .location-pill {
-    display: none;
-  }
-
-  .hero {
-    padding-top: 55px;
-  }
-
-  .hero h2 {
-    font-size: 39px;
-
-    letter-spacing: -1.8px;
-  }
-
-  .hero p {
-    font-size: 14px;
-  }
-
-  .search-box {
-    height: 60px;
-  }
-
-  .weather-grid,
-  .forecast-list,
-  .history-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .result-location {
-    align-items: flex-start;
-
-    gap: 10px;
-  }
-
-
-}
-/* =========================
-   AI MARKDOWN CONTENT
-========================= */
+/* =========================================================
+   AI MARKDOWN
+========================================================= */
 
 .ai-answer-content {
   color: #e2e8f0;
-  font-size: 14px;
-  line-height: 1.7;
+
+  font-size: 10px;
+
+  line-height: 1.65;
 }
 
 .ai-answer-content p {
-  margin: 0 0 16px;
+  margin: 0 0 12px;
 }
 
 .ai-answer-content p:last-child {
@@ -867,15 +1233,20 @@ footer span:first-child {
 .ai-answer-content h2,
 .ai-answer-content h3 {
   color: white;
-  margin: 18px 0 10px;
+
+  margin: 15px 0 8px;
+}
+
+.ai-answer-content h1 {
+  font-size: 16px;
 }
 
 .ai-answer-content h2 {
-  font-size: 20px;
+  font-size: 14px;
 }
 
 .ai-answer-content h3 {
-  font-size: 16px;
+  font-size: 12px;
 }
 
 .ai-answer-content strong {
@@ -884,33 +1255,43 @@ footer span:first-child {
 
 .ai-answer-content ul,
 .ai-answer-content ol {
-  margin: 10px 0 16px;
-  padding-left: 24px;
+  margin: 8px 0 12px;
+
+  padding-left: 19px;
 }
 
 .ai-answer-content li {
-  margin-bottom: 7px;
+  margin-bottom: 5px;
 }
 
 .ai-answer-content table {
   width: 100%;
+
   border-collapse: collapse;
-  margin: 18px 0;
-  font-size: 13px;
+
+  margin: 14px 0;
+
+  font-size: 9px;
+
   overflow: hidden;
-  border-radius: 10px;
+
+  border-radius: 8px;
 }
 
 .ai-answer-content th,
 .ai-answer-content td {
-  padding: 10px 12px;
+  padding: 8px 9px;
+
   text-align: left;
+
   border: 1px solid #334155;
 }
 
 .ai-answer-content th {
   background: #1e293b;
+
   color: white;
+
   font-weight: 700;
 }
 
@@ -919,16 +1300,224 @@ footer span:first-child {
 }
 
 .ai-answer-content blockquote {
-  margin: 16px 0;
-  padding: 10px 16px;
+  margin: 12px 0;
+
+  padding: 8px 12px;
+
   border-left: 3px solid #64748b;
+
   background: rgba(255, 255, 255, 0.04);
+
   color: #cbd5e1;
 }
 
 .ai-answer-content code {
   padding: 2px 5px;
-  border-radius: 5px;
+
+  border-radius: 4px;
+
   background: #1e293b;
+
   color: #e2e8f0;
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.error-card {
+  padding: 18px;
+
+  margin-top: 20px;
+
+  border: 1px solid #fecaca;
+
+  border-radius: 13px;
+
+  background: #fef2f2;
+}
+
+.error-card strong {
+  color: #b91c1c;
+
+  font-size: 12px;
+}
+
+.error-card p {
+  margin: 5px 0 0;
+
+  color: #7f1d1d;
+
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 25px 20px 30px;
+
+  color: #94a3b8;
+
+  font-size: 8px;
+}
+
+footer span:first-child {
+  color: #64748b;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 750px) {
+
+  .header {
+    padding: 0 4%;
+  }
+
+  .main {
+    width: 92%;
+
+    padding-top: 35px;
+  }
+
+  .weather-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .risk-indicators {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .risk-list {
+    grid-template-columns: 1fr;
+  }
+
+  .history-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 520px) {
+
+  .header {
+    height: 56px;
+  }
+
+  .location-pill {
+    padding: 7px 9px;
+
+    font-size: 9px;
+  }
+
+  .brand h1 {
+    font-size: 14px;
+  }
+
+  .brand p {
+    font-size: 8px;
+  }
+
+  .hero h2 {
+    font-size: 39px;
+
+    letter-spacing: -1.8px;
+  }
+
+  .hero > p {
+    font-size: 11px;
+  }
+
+  .quick-questions {
+    gap: 6px;
+  }
+
+  .quick-questions button {
+    font-size: 9px;
+  }
+
+  .risk-section {
+    padding: 13px;
+  }
+
+  .risk-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .overall-risk-badge {
+    width: 100%;
+  }
+
+  .risk-indicators {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .risk-list {
+    grid-template-columns: 1fr;
+  }
+
+  .evidence-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .forecast-item {
+    grid-template-columns: 1fr;
+
+    gap: 3px;
+  }
+
+  .history-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+}
+
+
+/* =========================================================
+   VERY SMALL SCREENS
+========================================================= */
+
+@media (max-width: 380px) {
+
+  .location-pill span {
+    display: none;
+  }
+
+  .hero h2 {
+    font-size: 34px;
+  }
+
+  .weather-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .risk-indicators {
+    grid-template-columns: 1fr;
+  }
+
+  .history-grid {
+    grid-template-columns: 1fr;
+  }
+
 }

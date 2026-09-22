@@ -1,11 +1,12 @@
 import re
-from datetime import date, timedelta
+from datetime import date
 
 from app.services.location_service import LocationService
 from app.services.weather_service import WeatherService
 from app.services.forecast_service import ForecastService
 from app.services.historical_weather_service import HistoricalWeatherService
 from app.services.llm_service import LLMService
+from app.agents.risk_agent import RiskAgent
 
 
 class WeatherOrchestrator:
@@ -18,24 +19,70 @@ class WeatherOrchestrator:
         self.forecast_service = ForecastService()
         self.historical_weather_service = HistoricalWeatherService()
         self.llm_service = LLMService()
+        self.risk_agent = RiskAgent()
+
+    # =========================================================
+    # CITY EXTRACTION
+    # =========================================================
 
     def extract_city(self, user_query: str):
 
         query = user_query.strip()
 
+        # -----------------------------------------------------
+        # Questions where the city comes after the weather term
+        # -----------------------------------------------------
+
         patterns = [
+
+            # Current weather
             r"weather\s+(?:in|at|for)\s+([a-zA-Z\s]+)",
+
             r"temperature\s+(?:in|at|for)\s+([a-zA-Z\s]+)",
+
+            r"how\s+does\s+the\s+temperature\s+feel\s+(?:in|at|for)\s+([a-zA-Z\s]+)",
+
+            r"how\s+does\s+it\s+feel\s+(?:in|at|for)\s+([a-zA-Z\s]+)",
+
+            r"what\s+does\s+the\s+temperature\s+feel\s+like\s+(?:in|at|for)\s+([a-zA-Z\s]+)",
+
+            r"what\s+does\s+it\s+feel\s+like\s+(?:in|at|for)\s+([a-zA-Z\s]+)",
+
+            # Forecast
             r"forecast\s+(?:in|at|for)\s+([a-zA-Z\s]+)",
+
+            r"prediction\s+(?:in|at|for)\s+([a-zA-Z\s]+)",
+
+            # Rain
             r"rain(?:ing)?\s+(?:in|at|for)\s+([a-zA-Z\s]+)",
+
             r"umbrella\s+(?:in|at|for)\s+([a-zA-Z\s]+)",
+
+            r"precipitation\s+(?:in|at|for)\s+([a-zA-Z\s]+)",
+
+            # Severe weather
             r"storm\s+(?:in|at|for)\s+([a-zA-Z\s]+)",
+
             r"cyclone\s+(?:in|at|for)\s+([a-zA-Z\s]+)",
+
             r"flood\s+(?:in|at|for)\s+([a-zA-Z\s]+)",
+
+            r"flooding\s+(?:in|at|for)\s+([a-zA-Z\s]+)",
+
             r"heatwave\s+(?:in|at|for)\s+([a-zA-Z\s]+)",
-            r"tomorrow\s+(?:in|at|for)\s+([a-zA-Z\s]+)",
+
+            r"danger\s+(?:in|at|for)\s+([a-zA-Z\s]+)",
+
+            r"risk\s+(?:in|at|for)\s+([a-zA-Z\s]+)",
+
+            r"warning\s+(?:in|at|for)\s+([a-zA-Z\s]+)",
+
+            # Historical
             r"history\s+(?:of|in|for)\s+([a-zA-Z\s]+)",
+
             r"historical\s+(?:weather\s+)?(?:of|in|for)\s+([a-zA-Z\s]+)",
+
+            r"past\s+weather\s+(?:in|at|for)\s+([a-zA-Z\s]+)",
         ]
 
         for pattern in patterns:
@@ -51,7 +98,7 @@ class WeatherOrchestrator:
                 city = match.group(1).strip()
 
                 city = re.sub(
-                    r"\s+(today|tomorrow|tonight|last year|previous year)$",
+                    r"\s+(today|tomorrow|tonight|yesterday|last year|previous year)$",
                     "",
                     city,
                     flags=re.IGNORECASE
@@ -59,10 +106,31 @@ class WeatherOrchestrator:
 
                 return city.rstrip("?.!,").strip()
 
+        # -----------------------------------------------------
+        # Questions where city comes BEFORE time
+        # -----------------------------------------------------
+
         patterns_with_city_before_time = [
+
             r"(?:go to|visit|travel to|going to)\s+([a-zA-Z\s]+?)\s+(?:today|tomorrow|tonight)",
-            r"(?:rain|raining|hot|cold)\s+(?:in|at)\s+([a-zA-Z\s]+?)\s+(?:today|tomorrow|tonight)",
+
+            r"(?:rain|raining|hot|cold|cool|warm)\s+(?:in|at)\s+([a-zA-Z\s]+?)\s+(?:today|tomorrow|tonight)",
+
             r"(?:weather)\s+(?:like)\s+(?:in|at)\s+([a-zA-Z\s]+?)\s+(?:last year|previous year)",
+
+            r"(?:danger|risk|flooding|flood|storm|cyclone|heatwave)\s+(?:in|at|for)\s+([a-zA-Z\s]+?)\s+(?:today|tomorrow|tonight)",
+
+            # Example:
+            # Is Mandya hot today?
+            r"(?:is|will)\s+([a-zA-Z\s]+?)\s+(?:hot|cold|rainy|raining|windy|stormy)\s+(?:today|tomorrow|tonight)",
+
+            # Example:
+            # Is it raining in Mandya today?
+            r"(?:is|will)\s+(?:it|the weather)\s+(?:be\s+)?(?:rainy|raining|hot|cold|windy)\s+(?:in|at)\s+([a-zA-Z\s]+)",
+
+            # Example:
+            # Can I travel to Mandya tomorrow?
+            r"(?:travel|go|visit|drive)\s+(?:to)\s+([a-zA-Z\s]+?)\s+(?:today|tomorrow|tonight)",
         ]
 
         for pattern in patterns_with_city_before_time:
@@ -79,13 +147,83 @@ class WeatherOrchestrator:
 
                 return city.rstrip("?.!,").strip()
 
+        # -----------------------------------------------------
+        # Direct city extraction for common natural questions
+        # -----------------------------------------------------
+
+        natural_patterns = [
+
+            # How is Mandya today?
+            r"how\s+is\s+([a-zA-Z\s]+?)\s+(?:today|tomorrow|tonight)",
+
+            # How's Mandya today?
+            r"how'?s\s+([a-zA-Z\s]+?)\s+(?:today|tomorrow|tonight)",
+
+            # Is Mandya safe today?
+            r"is\s+([a-zA-Z\s]+?)\s+safe\s+(?:today|tomorrow|tonight)",
+
+            # What should I wear in Mandya?
+            r"what\s+should\s+i\s+(?:wear|take|carry)\s+(?:in|at)\s+([a-zA-Z\s]+)",
+
+            # Can I go outside in Mandya?
+            r"(?:can|should)\s+i\s+(?:go\s+outside|go\s+out)\s+(?:in|at)\s+([a-zA-Z\s]+)",
+
+            # Is it safe to travel in Mandya?
+            r"is\s+it\s+safe\s+to\s+(?:travel|go|drive)\s+(?:in|to)\s+([a-zA-Z\s]+)",
+        ]
+
+        for pattern in natural_patterns:
+
+            match = re.search(
+                pattern,
+                query,
+                re.IGNORECASE
+            )
+
+            if match:
+
+                city = match.group(1).strip()
+
+                return city.rstrip("?.!,").strip()
+
         return None
+
+    # =========================================================
+    # INTENT DETECTION
+    # =========================================================
 
     def detect_intent(self, user_query: str):
 
         query = user_query.lower()
 
+        # -----------------------------------------------------
+        # Risk intent
+        # -----------------------------------------------------
+
+        if any(word in query for word in [
+            "danger",
+            "risk",
+            "unsafe",
+            "warning",
+            "severe weather",
+            "storm",
+            "cyclone",
+            "flood",
+            "flooding",
+            "heatwave",
+            "heavy rain",
+            "extreme weather",
+            "safe to travel",
+            "safe to go",
+            "weather risk"
+        ]):
+
+            return "risk"
+
+        # -----------------------------------------------------
         # Historical intent
+        # -----------------------------------------------------
+
         if any(word in query for word in [
             "historical",
             "history",
@@ -96,9 +234,13 @@ class WeatherOrchestrator:
             "recorded weather",
             "weather history"
         ]):
+
             return "historical"
 
+        # -----------------------------------------------------
         # Forecast intent
+        # -----------------------------------------------------
+
         if any(word in query for word in [
             "forecast",
             "tomorrow",
@@ -109,11 +251,17 @@ class WeatherOrchestrator:
             "later today",
             "will it be",
             "going to rain",
-            "going to be"
+            "going to be",
+            "expected",
+            "upcoming"
         ]):
+
             return "forecast"
 
+        # -----------------------------------------------------
         # Rain intent
+        # -----------------------------------------------------
+
         if any(word in query for word in [
             "rain",
             "raining",
@@ -121,33 +269,35 @@ class WeatherOrchestrator:
             "umbrella",
             "drizzle"
         ]):
+
             return "rain"
 
-        # Risk intent
-        if any(word in query for word in [
-            "storm",
-            "cyclone",
-            "flood",
-            "heatwave",
-            "severe weather",
-            "warning",
-            "danger",
-            "unsafe",
-            "risk"
-        ]):
-            return "risk"
-
+        # -----------------------------------------------------
         # Temperature intent
+        # -----------------------------------------------------
+
         if any(word in query for word in [
             "temperature",
             "hot",
             "cold",
             "heat",
-            "cool"
+            "cool",
+            "warm",
+            "feel like",
+            "feels like"
         ]):
+
             return "temperature"
 
+        # -----------------------------------------------------
+        # Default
+        # -----------------------------------------------------
+
         return "current"
+
+    # =========================================================
+    # MAIN AGENT PROCESS
+    # =========================================================
 
     async def process(self, user_query: str):
 
@@ -155,16 +305,26 @@ class WeatherOrchestrator:
 
         intent = self.detect_intent(user_query)
 
+        # -----------------------------------------------------
+        # City not detected
+        # -----------------------------------------------------
+
         if not city:
+
             return {
                 "success": False,
                 "intent": intent,
                 "message": "I could not identify the city from your question."
             }
 
+        # -----------------------------------------------------
+        # Search location
+        # -----------------------------------------------------
+
         locations = await self.location_service.search_location(city)
 
         if not locations:
+
             return {
                 "success": False,
                 "city": city,
@@ -174,9 +334,100 @@ class WeatherOrchestrator:
 
         location = locations[0]
 
-        # --------------------------------
-        # HISTORICAL WEATHER
-        # --------------------------------
+        # =====================================================
+        # RISK INTENT
+        # =====================================================
+
+        if intent == "risk":
+
+            current_weather = await self.weather_service.get_current_weather(
+                location["latitude"],
+                location["longitude"]
+            )
+
+            forecast_data = await self.forecast_service.get_forecast(
+                location["latitude"],
+                location["longitude"]
+            )
+
+            risk_result = self.risk_agent.analyze_risk(
+                current_weather,
+                forecast_data
+            )
+
+            risk_text = ""
+
+            for risk in risk_result["risks"]:
+
+                risk_text += f"""
+Risk Type: {risk["type"]}
+Risk Level: {risk["level"]}
+Reason: {risk["reason"]}
+Safety Advice: {risk["advice"]}
+"""
+
+            if not risk_text:
+
+                risk_text = (
+                    "No significant weather risk indicators were detected."
+                )
+
+            prompt = f"""
+You are WeatherGPT, an intelligent weather risk assistant.
+
+User question:
+{user_query}
+
+Location:
+{location["name"]}, {location.get("state")}, {location["country"]}
+
+Current Weather:
+Temperature: {current_weather["temperature"]}°C
+Feels like: {current_weather["feels_like"]}°C
+Humidity: {current_weather["humidity"]}%
+Wind speed: {current_weather["wind_speed"]} m/s
+Condition: {current_weather["weather"]}
+
+Risk Analysis:
+
+Overall Risk Level:
+{risk_result["overall_level"]}
+
+Detected Risks:
+{risk_text}
+
+Your task:
+
+1. Clearly answer the user's question.
+2. Explain the detected weather risks.
+3. Mention the overall risk level.
+4. Give practical safety advice.
+5. Use ONLY the weather and risk information provided above.
+6. Do NOT invent warnings, rainfall amounts, flooding events,
+   government alerts, emergency situations, or other weather facts.
+7. Do NOT claim that flooding is occurring unless the provided
+   data explicitly indicates it.
+8. If there is insufficient information to confirm a specific danger,
+   clearly say that the available data does not confirm it.
+
+Keep the answer concise and practical.
+"""
+
+            answer = await self.llm_service.generate_response(prompt)
+
+            return {
+                "success": True,
+                "query": user_query,
+                "intent": intent,
+                "location": location,
+                "current_weather": current_weather,
+                "risk_analysis": risk_result,
+                "answer": answer
+            }
+
+        # =====================================================
+        # HISTORICAL INTENT
+        # =====================================================
 
         if intent == "historical":
 
@@ -194,11 +445,13 @@ class WeatherOrchestrator:
                 31
             )
 
-            historical_data = await self.historical_weather_service.get_historical_weather(
-                location["latitude"],
-                location["longitude"],
-                start_date.isoformat(),
-                end_date.isoformat()
+            historical_data = (
+                await self.historical_weather_service.get_historical_weather(
+                    location["latitude"],
+                    location["longitude"],
+                    start_date.isoformat(),
+                    end_date.isoformat()
+                )
             )
 
             hourly = historical_data["hourly"]
@@ -228,30 +481,52 @@ class WeatherOrchestrator:
             ]
 
             summary = {
+
                 "year": today.year - 1,
+
                 "average_temperature": (
-                    round(sum(temperatures) / len(temperatures), 2)
-                    if temperatures else None
+                    round(
+                        sum(temperatures) / len(temperatures),
+                        2
+                    )
+                    if temperatures
+                    else None
                 ),
+
                 "maximum_temperature": (
                     max(temperatures)
-                    if temperatures else None
+                    if temperatures
+                    else None
                 ),
+
                 "minimum_temperature": (
                     min(temperatures)
-                    if temperatures else None
+                    if temperatures
+                    else None
                 ),
+
                 "total_precipitation_mm": (
-                    round(sum(precipitation), 2)
-                    if precipitation else None
+                    round(
+                        sum(precipitation),
+                        2
+                    )
+                    if precipitation
+                    else None
                 ),
+
                 "average_humidity": (
-                    round(sum(humidity) / len(humidity), 2)
-                    if humidity else None
+                    round(
+                        sum(humidity) / len(humidity),
+                        2
+                    )
+                    if humidity
+                    else None
                 ),
+
                 "maximum_wind_speed_kmh": (
                     max(wind_speed)
-                    if wind_speed else None
+                    if wind_speed
+                    else None
                 )
             }
 
@@ -289,7 +564,17 @@ Maximum wind speed:
 
 Answer the user's question using ONLY the historical information provided.
 
-Explain the result clearly and practically.
+You may interpret the numbers, but do not add unsupported facts.
+
+Do not claim anything about:
+- water availability
+- climate classification
+- agricultural conditions
+- drought
+- flooding
+- local climate trends
+
+unless that information is explicitly present above.
 
 Do not invent information.
 """
@@ -309,9 +594,9 @@ Do not invent information.
                 "answer": answer
             }
 
-        # --------------------------------
-        # FORECAST
-        # --------------------------------
+        # =====================================================
+        # FORECAST INTENT
+        # =====================================================
 
         if intent == "forecast":
 
@@ -365,9 +650,9 @@ Do not invent weather information.
                 "answer": answer
             }
 
-        # --------------------------------
-        # CURRENT WEATHER
-        # --------------------------------
+        # =====================================================
+        # CURRENT / TEMPERATURE / RAIN INTENT
+        # =====================================================
 
         weather = await self.weather_service.get_current_weather(
             location["latitude"],
@@ -397,6 +682,9 @@ Condition: {weather["weather"]}
 Answer the user's question using ONLY the weather information provided.
 
 Be clear, concise and practical.
+
+If the user asks how the temperature feels,
+use the "feels like" temperature.
 
 Do not invent weather information.
 """

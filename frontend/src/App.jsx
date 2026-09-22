@@ -14,6 +14,11 @@ import {
   CalendarDays,
   History,
   Sparkles,
+  ShieldAlert,
+  CloudRain,
+  CloudLightning,
+  Waves,
+  AlertTriangle,
 } from "lucide-react";
 
 import "./App.css";
@@ -24,6 +29,10 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
 
+
+  // =========================================================
+  // ASK WEATHERGPT
+  // =========================================================
 
   const askWeatherGPT = async () => {
     if (!question.trim()) return;
@@ -40,34 +49,181 @@ function App() {
       const data = await res.json();
 
       setResponse(data);
+
     } catch (error) {
+
       setResponse({
         success: false,
         message: "Unable to connect to WeatherGPT backend.",
       });
+
     }
 
     setLoading(false);
   };
 
 
+  // =========================================================
+  // ENTER KEY
+  // =========================================================
+
   const handleKeyDown = (event) => {
+
     if (event.key === "Enter" && !event.shiftKey) {
+
       event.preventDefault();
+
       askWeatherGPT();
+
     }
+
   };
 
 
+  // =========================================================
+  // QUICK QUESTION
+  // =========================================================
+
   const quickQuestion = (text) => {
+
     setQuestion(text);
+
+  };
+
+
+  // =========================================================
+  // RISK ICON
+  // =========================================================
+
+  const getRiskIcon = (type) => {
+
+    switch (type) {
+
+      case "heavy_rain":
+      case "rain":
+      case "precipitation_probability":
+        return <CloudRain size={20} />;
+
+      case "thunderstorm":
+        return <CloudLightning size={20} />;
+
+      case "flood":
+        return <Waves size={20} />;
+
+      case "wind":
+      case "forecast_wind":
+        return <Wind size={20} />;
+
+      case "heat":
+        return <Thermometer size={20} />;
+
+      default:
+        return <AlertTriangle size={20} />;
+
+    }
+
+  };
+
+
+  // =========================================================
+  // RISK TYPE FORMATTER
+  // =========================================================
+
+  const formatRiskType = (type) => {
+
+    return type
+      ?.replaceAll("_", " ")
+      .replace(/\b\w/g, (letter) => letter.toUpperCase());
+
+  };
+
+
+  // =========================================================
+  // RISK CLASS
+  // =========================================================
+
+  const getRiskClass = (level) => {
+
+    if (level === "high") {
+      return "risk-high";
+    }
+
+    if (level === "moderate") {
+      return "risk-moderate";
+    }
+
+    return "risk-low";
+
+  };
+
+
+  // =========================================================
+  // FORMAT EVIDENCE KEY
+  // =========================================================
+
+  const formatEvidenceKey = (key) => {
+
+    return key
+      .replaceAll("_", " ")
+      .replace(/\b\w/g, (letter) => letter.toUpperCase());
+
+  };
+
+
+  // =========================================================
+  // FORMAT EVIDENCE VALUE
+  // =========================================================
+
+  const formatEvidenceValue = (key, value) => {
+
+    if (value === null || value === undefined) {
+      return "-";
+    }
+
+    if (typeof value !== "number") {
+      return value;
+    }
+
+    let formattedValue;
+
+    if (Number.isInteger(value)) {
+      formattedValue = value;
+    } else {
+      formattedValue = value.toFixed(2);
+    }
+
+    if (key.includes("probability")) {
+      return `${formattedValue}%`;
+    }
+
+    if (key.includes("temperature")) {
+      return `${formattedValue}°C`;
+    }
+
+    if (key.includes("rain_amount")) {
+      return `${formattedValue} mm`;
+    }
+
+    if (key.includes("wind_speed")) {
+      return `${formattedValue} m/s`;
+    }
+
+    if (key.includes("wind_gust")) {
+      return `${formattedValue} m/s`;
+    }
+
+    return formattedValue;
+
   };
 
 
   return (
+
     <div className="app">
 
-      {/* HEADER */}
+      {/* =====================================================
+          HEADER
+      ===================================================== */}
 
       <header className="header">
 
@@ -78,42 +234,71 @@ function App() {
           </div>
 
           <div>
-            <h1>WeatherGPT</h1>
-            <p>AI Weather Intelligence</p>
+
+            <h1>
+              WeatherGPT
+            </h1>
+
+            <p>
+              AI Weather Intelligence
+            </p>
+
           </div>
 
         </div>
 
 
         <div className="location-pill">
+
           <MapPin size={17} />
-          <span>Mandya, Karnataka</span>
+
+          <span>
+            Mandya, Karnataka
+          </span>
+
         </div>
 
       </header>
 
 
-      {/* MAIN */}
+      {/* =====================================================
+          MAIN
+      ===================================================== */}
 
       <main className="main">
+
+        {/* ===================================================
+            HERO
+        =================================================== */}
 
         <section className="hero">
 
           <div className="hero-icon">
+
             <Sparkles size={22} />
+
           </div>
 
+
           <h2>
+
             Your AI Weather
-            <span> Intelligence</span>
+
+            <span>
+              {" "}Intelligence
+            </span>
+
           </h2>
+
 
           <p>
             Ask anything about weather, forecasts and historical trends.
           </p>
 
 
-          {/* SEARCH */}
+          {/* =================================================
+              SEARCH
+          ================================================= */}
 
           <div className="search-box">
 
@@ -127,41 +312,56 @@ function App() {
               onKeyDown={handleKeyDown}
             />
 
+
             <button
               onClick={askWeatherGPT}
               disabled={loading}
             >
+
               {loading ? (
                 "..."
               ) : (
                 <Send size={19} />
               )}
+
             </button>
 
           </div>
 
 
-          {/* QUICK QUESTIONS */}
+          {/* =================================================
+              QUICK QUESTIONS
+          ================================================= */}
 
           <div className="quick-questions">
 
             <button
               onClick={() =>
-                quickQuestion("What is the temperature in Mandya?")
+                quickQuestion(
+                  "What is the temperature in Mandya?"
+                )
               }
             >
+
               <Thermometer size={16} />
+
               Current weather
+
             </button>
 
 
             <button
               onClick={() =>
-                quickQuestion("What is the forecast for Mandya?")
+                quickQuestion(
+                  "What is the forecast for Mandya?"
+                )
               }
             >
+
               <CalendarDays size={16} />
+
               Forecast
+
             </button>
 
 
@@ -172,8 +372,26 @@ function App() {
                 )
               }
             >
+
               <History size={16} />
+
               Historical
+
+            </button>
+
+
+            <button
+              onClick={() =>
+                quickQuestion(
+                  "Is there any danger of heavy rain or flooding in Mandya?"
+                )
+              }
+            >
+
+              <ShieldAlert size={16} />
+
+              Weather Risk
+
             </button>
 
           </div>
@@ -181,9 +399,12 @@ function App() {
         </section>
 
 
-        {/* LOADING */}
+        {/* =====================================================
+            LOADING
+        ===================================================== */}
 
         {loading && (
+
           <div className="loading-card">
 
             <div className="loader"></div>
@@ -193,16 +414,22 @@ function App() {
             </p>
 
           </div>
+
         )}
 
 
-        {/* SUCCESS RESPONSE */}
+        {/* =====================================================
+            SUCCESS RESPONSE
+        ===================================================== */}
 
         {response && response.success && (
 
           <section className="result-section">
 
-            {/* LOCATION */}
+
+            {/* =================================================
+                LOCATION
+            ================================================= */}
 
             <div className="result-location">
 
@@ -215,25 +442,35 @@ function App() {
                 </strong>
 
                 <span>
+
                   {response.location?.state}
+
                   {response.location?.state && ", "}
+
                   {response.location?.country}
+
                 </span>
 
               </div>
 
+
               <span className="intent-badge">
+
                 {response.intent}
+
               </span>
 
             </div>
 
 
-            {/* CURRENT WEATHER */}
+            {/* =================================================
+                CURRENT WEATHER
+            ================================================= */}
 
             {response.weather && (
 
               <div className="weather-grid">
+
 
                 <div className="weather-card">
 
@@ -315,7 +552,417 @@ function App() {
             )}
 
 
-            {/* FORECAST */}
+            {/* =================================================
+                WEATHER RISK ANALYSIS
+            ================================================= */}
+
+            {response.risk_analysis && (
+
+              <div className="risk-section">
+
+
+                {/* =============================================
+                    RISK HEADER
+                ============================================= */}
+
+                <div className="risk-header">
+
+                  <div className="risk-heading">
+
+                    <div className="risk-title-icon">
+
+                      <ShieldAlert size={21} />
+
+                    </div>
+
+
+                    <div>
+
+                      <h3>
+                        Weather Risk Analysis
+                      </h3>
+
+                      <p>
+                        AI-assisted analysis of current and forecast
+                        conditions
+                      </p>
+
+                    </div>
+
+                  </div>
+
+
+                  <div
+                    className={`overall-risk-badge ${getRiskClass(
+                      response.risk_analysis.overall_level
+                    )}`}
+                  >
+
+                    <span>
+                      Overall Risk
+                    </span>
+
+                    <strong>
+                      {response.risk_analysis.overall_level}
+                    </strong>
+
+                  </div>
+
+                </div>
+
+
+                {/* =============================================
+                    RISK INDICATORS
+                ============================================= */}
+
+                {response.risk_analysis.indicators && (
+
+                  <div className="risk-indicators">
+
+
+                    <div className="risk-indicator-card">
+
+                      <CloudRain size={18} />
+
+                      <span>
+                        Rain Periods
+                      </span>
+
+                      <strong>
+                        {
+                          response.risk_analysis.indicators
+                            .rain_periods
+                        }
+                      </strong>
+
+                    </div>
+
+
+                    <div className="risk-indicator-card">
+
+                      <CloudRain size={18} />
+
+                      <span>
+                        Heavy Rain
+                      </span>
+
+                      <strong>
+                        {
+                          response.risk_analysis.indicators
+                            .heavy_rain_periods
+                        }
+                      </strong>
+
+                    </div>
+
+
+                    <div className="risk-indicator-card">
+
+                      <CloudLightning size={18} />
+
+                      <span>
+                        Thunderstorms
+                      </span>
+
+                      <strong>
+                        {
+                          response.risk_analysis.indicators
+                            .thunderstorm_periods
+                        }
+                      </strong>
+
+                    </div>
+
+
+                    <div className="risk-indicator-card">
+
+                      <Wind size={18} />
+
+                      <span>
+                        High Wind
+                      </span>
+
+                      <strong>
+                        {
+                          response.risk_analysis.indicators
+                            .high_wind_periods
+                        }
+                      </strong>
+
+                    </div>
+
+
+                    <div className="risk-indicator-card">
+
+                      <Droplets size={18} />
+
+                      <span>
+                        Max Rain Chance
+                      </span>
+
+                      <strong>
+                        {
+                          response.risk_analysis.indicators
+                            .maximum_rain_probability
+                        }%
+                      </strong>
+
+                    </div>
+
+
+                    <div className="risk-indicator-card">
+
+                      <Waves size={18} />
+
+                      <span>
+                        Max Rain / 3h
+                      </span>
+
+                      <strong>
+                        {
+                          response.risk_analysis.indicators
+                            .maximum_rain_amount_3h_mm
+                        } mm
+                      </strong>
+
+                    </div>
+
+                  </div>
+
+                )}
+
+
+                {/* =============================================
+                    PRIORITY RISK
+                ============================================= */}
+
+                {response.risk_analysis.priority_risk && (
+
+                  <div className="priority-risk">
+
+                    <AlertTriangle size={16} />
+
+                    <span>
+                      Priority Risk:
+                    </span>
+
+                    <strong>
+                      {formatRiskType(
+                        response.risk_analysis.priority_risk
+                      )}
+                    </strong>
+
+                  </div>
+
+                )}
+
+
+                {/* =============================================
+                    DETECTED RISKS
+                ============================================= */}
+
+                {response.risk_analysis.risks?.length > 0 ? (
+
+                  <div className="detected-risks">
+
+
+                    <div className="risk-subtitle">
+
+                      <AlertTriangle size={18} />
+
+                      <h4>
+                        Detected Risks
+                      </h4>
+
+                    </div>
+
+
+                    <div className="risk-list">
+
+
+                      {response.risk_analysis.risks.map(
+                        (risk, index) => (
+
+                          <div
+                            className={`risk-card ${getRiskClass(
+                              risk.level
+                            )}`}
+                            key={index}
+                          >
+
+
+                            {/* RISK TITLE */}
+
+                            <div className="risk-card-top">
+
+                              <div className="risk-card-title">
+
+
+                                <div className="risk-card-icon">
+
+                                  {getRiskIcon(
+                                    risk.type
+                                  )}
+
+                                </div>
+
+
+                                <div>
+
+                                  <h4>
+                                    {formatRiskType(
+                                      risk.type
+                                    )}
+                                  </h4>
+
+                                  <span>
+                                    {risk.level} risk
+                                  </span>
+
+                                </div>
+
+                              </div>
+
+
+                              {risk.severity_score && (
+
+                                <div className="severity-score">
+
+                                  Score{" "}
+
+                                  {risk.severity_score}
+
+                                  /3
+
+                                </div>
+
+                              )}
+
+                            </div>
+
+
+                            {/* WHY */}
+
+                            <div className="risk-reason">
+
+                              <strong>
+                                Why?
+                              </strong>
+
+                              <p>
+                                {risk.reason}
+                              </p>
+
+                            </div>
+
+
+                            {/* EVIDENCE */}
+
+                            {risk.evidence && (
+
+                              <div className="risk-evidence">
+
+                                <strong>
+                                  Evidence
+                                </strong>
+
+
+                                <div className="evidence-grid">
+
+                                  {Object.entries(
+                                    risk.evidence
+                                  ).map(
+                                    ([key, value]) => (
+
+                                      <div
+                                        className="evidence-item"
+                                        key={key}
+                                      >
+
+                                        <span>
+                                          {formatEvidenceKey(
+                                            key
+                                          )}
+                                        </span>
+
+                                        <strong>
+                                          {formatEvidenceValue(
+                                            key,
+                                            value
+                                          )}
+                                        </strong>
+
+                                      </div>
+
+                                    )
+                                  )}
+
+                                </div>
+
+                              </div>
+
+                            )}
+
+
+                            {/* SAFETY ADVICE */}
+
+                            <div className="risk-advice">
+
+                              <strong>
+                                Safety Advice
+                              </strong>
+
+                              <p>
+                                {risk.advice}
+                              </p>
+
+                            </div>
+
+                          </div>
+
+                        )
+                      )}
+
+                    </div>
+
+                  </div>
+
+                ) : (
+
+                  <div className="no-risk-card">
+
+                    <div>
+
+                      <ShieldAlert size={21} />
+
+                    </div>
+
+
+                    <div>
+
+                      <strong>
+                        No significant weather risks detected
+                      </strong>
+
+                      <p>
+                        The available current and forecast data
+                        does not indicate a significant weather risk.
+                      </p>
+
+                    </div>
+
+                  </div>
+
+                )}
+
+              </div>
+
+            )}
+
+
+            {/* =================================================
+                FORECAST
+            ================================================= */}
 
             {response.forecast && (
 
@@ -366,7 +1013,9 @@ function App() {
             )}
 
 
-            {/* HISTORICAL WEATHER */}
+            {/* =================================================
+                HISTORICAL WEATHER
+            ================================================= */}
 
             {response.summary && (
 
@@ -377,7 +1026,8 @@ function App() {
                   <History size={19} />
 
                   <h3>
-                    Historical Summary — {response.summary.year}
+                    Historical Summary —{" "}
+                    {response.summary.year}
                   </h3>
 
                 </div>
@@ -443,15 +1093,21 @@ function App() {
             )}
 
 
-            {/* AI ANSWER */}
+            {/* =================================================
+                AI ANSWER
+            ================================================= */}
 
             <div className="ai-answer">
+
 
               <div className="answer-header">
 
                 <div className="ai-icon">
+
                   <Sparkles size={18} />
+
                 </div>
+
 
                 <div>
 
@@ -468,11 +1124,11 @@ function App() {
               </div>
 
 
-              {/* GITHUB-FLAVORED MARKDOWN */}
-
               <div className="ai-answer-content">
 
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                >
                   {response.answer}
                 </ReactMarkdown>
 
@@ -485,7 +1141,9 @@ function App() {
         )}
 
 
-        {/* ERROR */}
+        {/* =====================================================
+            ERROR
+        ===================================================== */}
 
         {response && !response.success && (
 
@@ -506,7 +1164,9 @@ function App() {
       </main>
 
 
-      {/* FOOTER */}
+      {/* =====================================================
+          FOOTER
+      ===================================================== */}
 
       <footer>
 
